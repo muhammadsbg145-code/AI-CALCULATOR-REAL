@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ultimate Calculator Pro</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial;
+transition:0.3s;
+}
+
+body{
+min-height:100vh;
+background:linear-gradient(135deg,#0f172a,#1e293b);
+display:flex;
+justify-content:center;
+align-items:center;
+padding:10px;
+overflow:hidden;
+}
+
+/* THEMES */
+
+body.light{
+background:linear-gradient(135deg,#f1f5f9,#cbd5e1);
+}
+
+body.light .container{
+background:#ffffff;
+}
+
+body.light .content{
+background:#f8fafc;
+}
+
+body.light .screen{
+background:#e2e8f0;
+color:#111;
+}
+
+body.light .buttons button{
+background:#cbd5e1;
+color:#111;
+}
+
+body.light .msg{
+background:#cbd5e1;
+color:#111;
+}
+
+/* MAIN */
+
+.container{
+width:100%;
+max-width:1200px;
+height:95vh;
+background:#111827;
+border-radius:25px;
+overflow:hidden;
+display:flex;
+box-shadow:0 0 30px rgba(0,0,0,0.5);
+}
+
+/* SIDEBAR */
+
+.sidebar{
+width:280px;
+background:#0f172a;
+padding:20px;
+display:flex;
+flex-direction:column;
+gap:15px;
+}
+
+.logo{
+font-size:30px;
+font-weight:bold;
+color:white;
+text-align:center;
+margin-bottom:10px;
+}
+
+.menu button,
+.theme-btn{
+width:100%;
+padding:15px;
+border:none;
+border-radius:15px;
+background:#2563eb;
+color:white;
+font-size:17px;
+font-weight:bold;
+cursor:pointer;
+margin-bottom:10px;
+}
+
+.menu button:hover,
+.theme-btn:hover{
+transform:scale(1.03);
+}
+
+/* CONTENT */
+
+.content{
+flex:1;
+padding:20px;
+overflow:auto;
+background:#1f2937;
+}
+
+.hidden{
+display:none;
+}
+
+/* SCREEN */
+
+.screen{
+width:100%;
+height:80px;
+border:none;
+outline:none;
+border-radius:15px;
+background:black;
+color:#00ff99;
+font-size:35px;
+padding:15px;
+text-align:right;
+margin-bottom:20px;
+}
+
+/* BUTTONS */
+
+.buttons{
+display:grid;
+grid-template-columns:repeat(6,1fr);
+gap:10px;
+}
+
+.buttons button{
+height:65px;
+border:none;
+border-radius:12px;
+background:#374151;
+color:white;
+font-size:20px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.buttons button:hover{
+transform:scale(1.05);
+}
+
+.equal{
+background:#00c853 !important;
+}
+
+.clear{
+background:#ff1744 !important;
+}
+
+/* CHAT */
+
+.chat-box{
+height:100%;
+display:flex;
+flex-direction:column;
+}
+
+.messages{
+flex:1;
+overflow-y:auto;
+padding:10px;
+}
+
+.msg{
+background:#374151;
+padding:12px;
+border-radius:12px;
+margin-bottom:10px;
+color:white;
+line-height:1.5;
+}
+
+.input-area{
+display:flex;
+gap:10px;
+margin-top:10px;
+}
+
+.input-area input{
+flex:1;
+padding:15px;
+border:none;
+border-radius:12px;
+font-size:18px;
+outline:none;
+}
+
+.input-area button{
+padding:15px 20px;
+border:none;
+border-radius:12px;
+background:#2563eb;
+color:white;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+body{
+padding:0;
+overflow:auto;
+}
+
+.container{
+flex-direction:column;
+height:100vh;
+border-radius:0;
+}
+
+.sidebar{
+width:100%;
+padding:10px;
+flex-direction:row;
+flex-wrap:wrap;
+justify-content:center;
+}
+
+.logo{
+width:100%;
+font-size:24px;
+}
+
+.menu{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+justify-content:center;
+}
+
+.menu button,
+.theme-btn{
+width:auto;
+padding:12px;
+font-size:14px;
+margin-bottom:0;
+}
+
+.content{
+padding:10px;
+}
+
+.screen{
+height:65px;
+font-size:25px;
+}
+
+.buttons{
+grid-template-columns:repeat(4,1fr);
+gap:8px;
+}
+
+.buttons button{
+height:55px;
+font-size:16px;
+}
+
+.input-area{
+flex-direction:column;
+}
+
+.input-area button{
+width:100%;
+}
+
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<div class="logo">
+Calculator Pro
+</div>
+
+<div class="menu">
+
+<button onclick="showSimple()">
+Simple
+</button>
+
+<button onclick="showScientific()">
+Scientific
+</button>
+
+<button onclick="showAI()">
+AI Chat
+</button>
+
+</div>
+
+<button class="theme-btn" onclick="toggleTheme()">
+Change Theme
+</button>
+
+</div>
+
+<!-- CONTENT -->
+
+<div class="content">
+
+<!-- SIMPLE -->
+
+<div id="simpleCalc">
+
+<input type="text" id="simpleScreen" class="screen" readonly>
+
+<div class="buttons">
+
+<button onclick="addValue('7')">7</button>
+<button onclick="addValue('8')">8</button>
+<button onclick="addValue('9')">9</button>
+<button onclick="addValue('/')">÷</button>
+<button class="clear" onclick="clearScreen()">C</button>
+<button onclick="backspace()">⌫</button>
+
+<button onclick="addValue('4')">4</button>
+<button onclick="addValue('5')">5</button>
+<button onclick="addValue('6')">6</button>
+<button onclick="addValue('*')">×</button>
+<button onclick="addValue('%')">%</button>
+<button onclick="deleteWord()">DEL</button>
+
+<button onclick="addValue('1')">1</button>
+<button onclick="addValue('2')">2</button>
+<button onclick="addValue('3')">3</button>
+<button onclick="addValue('-')">-</button>
+<button onclick="addValue('(')">(</button>
+<button onclick="addValue(')')">)</button>
+
+<button onclick="addValue('0')">0</button>
+<button onclick="addValue('.')">.</button>
+<button onclick="addValue('+')">+</button>
+<button class="equal" onclick="calculate()">=</button>
+<button onclick="goBack()">⬅</button>
+
+</div>
+
+</div>
+
+<!-- SCIENTIFIC -->
+
+<div id="scientificCalc" class="hidden">
+
+<input type="text" id="scienceScreen" class="screen" readonly>
+
+<div class="buttons">
+
+<button onclick="scienceValue('sin(')">sin</button>
+<button onclick="scienceValue('cos(')">cos</button>
+<button onclick="scienceValue('tan(')">tan</button>
+<button onclick="scienceValue('/')">÷</button>
+<button class="clear" onclick="scienceClear()">C</button>
+<button onclick="scienceBackspace()">⌫</button>
+
+<button onclick="scienceValue('sqrt(')">√</button>
+<button onclick="scienceValue('cbrt(')">∛</button>
+<button onclick="scienceValue('log(')">log</button>
+<button onclick="scienceValue('ln(')">ln</button>
+<button onclick="scienceValue('%')">%</button>
+<button onclick="scienceDeleteWord()">DEL</button>
+
+<button onclick="scienceValue('pi')">π</button>
+<button onclick="scienceValue('e')">e</button>
+<button onclick="scienceValue('^')">xʸ</button>
+<button onclick="scienceValue('*')">×</button>
+<button onclick="scienceValue('(')">(</button>
+<button onclick="scienceValue(')')">)</button>
+
+<button onclick="scienceValue('7')">7</button>
+<button onclick="scienceValue('8')">8</button>
+<button onclick="scienceValue('9')">9</button>
+<button onclick="scienceValue('-')">-</button>
+<button onclick="scienceValue('!')">n!</button>
+<button onclick="scienceValue('Math.random()')">Rnd</button>
+
+<button onclick="scienceValue('4')">4</button>
+<button onclick="scienceValue('5')">5</button>
+<button onclick="scienceValue('6')">6</button>
+<button onclick="scienceValue('+')">+</button>
+<button onclick="scienceValue('Math.floor(')">floor</button>
+<button onclick="scienceValue('Math.ceil(')">ceil</button>
+
+<button onclick="scienceValue('1')">1</button>
+<button onclick="scienceValue('2')">2</button>
+<button onclick="scienceValue('3')">3</button>
+<button onclick="scienceValue('.')">.</button>
+<button onclick="scienceValue('Math.round(')">round</button>
+<button onclick="scienceGoBack()">⬅</button>
+
+<button onclick="scienceValue('0')">0</button>
+<button class="equal" onclick="scienceCalculate()">=</button>
+
+</div>
+
+</div>
+
+<!-- AI CHAT -->
+
+<div id="aiChat" class="hidden">
+
+<div class="chat-box">
+
+<div class="messages" id="messages">
+
+<div class="msg">
+<b>AI:</b> Hello 👋<br><br>
+
+Examples:<br>
+sqrt(25)<br>
+5^2<br>
+sin(1)<br>
+pow(2,5)<br>
+abs(-100)
+</div>
+
+</div>
+
+<div class="input-area">
+
+<input type="text" id="userInput" placeholder="Ask math question...">
+
+<button onclick="sendMessage()">
+Send
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+// MENU
+
+function showSimple(){
+
+document.getElementById("simpleCalc").classList.remove("hidden");
+document.getElementById("scientificCalc").classList.add("hidden");
+document.getElementById("aiChat").classList.add("hidden");
+
+}
+
+function showScientific(){
+
+document.getElementById("scientificCalc").classList.remove("hidden");
+document.getElementById("simpleCalc").classList.add("hidden");
+document.getElementById("aiChat").classList.add("hidden");
+
+}
+
+function showAI(){
+
+document.getElementById("aiChat").classList.remove("hidden");
+document.getElementById("simpleCalc").classList.add("hidden");
+document.getElementById("scientificCalc").classList.add("hidden");
+
+}
+
+// THEME
+
+function toggleTheme(){
+
+document.body.classList.toggle("light");
+
+}
+
+// SIMPLE
+
+let screen=document.getElementById("simpleScreen");
+
+function addValue(val){
+screen.value += val;
+}
+
+function clearScreen(){
+screen.value="";
+}
+
+function backspace(){
+screen.value = screen.value.slice(0,-1);
+}
+
+function deleteWord(){
+
+let words = screen.value.split(" ");
+
+words.pop();
+
+screen.value = words.join(" ");
+
+}
+
+function goBack(){
+
+screen.value = screen.value.slice(0,-1);
+
+}
+
+function calculate(){
+
+try{
+screen.value = eval(screen.value);
+}
+catch{
+screen.value = "Error";
+}
+
+}
+
+// SCIENTIFIC
+
+let science=document.getElementById("scienceScreen");
+
+function scienceValue(val){
+science.value += val;
+}
+
+function scienceClear(){
+science.value="";
+}
+
+function scienceBackspace(){
+science.value = science.value.slice(0,-1);
+}
+
+function scienceDeleteWord(){
+
+let words = science.value.split(" ");
+
+words.pop();
+
+science.value = words.join(" ");
+
+}
+
+function scienceGoBack(){
+
+science.value = science.value.slice(0,-1);
+
+}
+
+function factorial(n){
+
+if(n===0 || n===1){
+return 1;
+}
+
+let result=1;
+
+for(let i=2;i<=n;i++){
+result*=i;
+}
+
+return result;
+
+}
+
+function scienceCalculate(){
+
+try{
+
+let exp = science.value;
+
+exp = exp.replace(/sin\(/g,'Math.sin(');
+exp = exp.replace(/cos\(/g,'Math.cos(');
+exp = exp.replace(/tan\(/g,'Math.tan(');
+
+exp = exp.replace(/sqrt\(/g,'Math.sqrt(');
+exp = exp.replace(/cbrt\(/g,'Math.cbrt(');
+
+exp = exp.replace(/log\(/g,'Math.log10(');
+exp = exp.replace(/ln\(/g,'Math.log(');
+
+exp = exp.replace(/pi/g,'Math.PI');
+exp = exp.replace(/e/g,'Math.E');
+
+exp = exp.replace(/\^/g,'**');
+
+exp = exp.replace(/(\d+)!/g,function(match,number){
+
+return factorial(number);
+
+});
+
+science.value = eval(exp);
+
+}
+catch{
+
+science.value = "Error";
+
+}
+
+}
+
+// AI CHAT
+
+function solveMath(question){
+
+try{
+
+let exp = question;
+
+exp = exp.replace(/sin\(/g,'Math.sin(');
+exp = exp.replace(/cos\(/g,'Math.cos(');
+exp = exp.replace(/tan\(/g,'Math.tan(');
+
+exp = exp.replace(/sqrt\(/g,'Math.sqrt(');
+
+exp = exp.replace(/\^/g,'**');
+
+return eval(exp);
+
+}
+catch{
+
+return "Sirf math solve kar sakta hoon.";
+
+}
+
+}
+
+function sendMessage(){
+
+let input=document.getElementById("userInput");
+
+let text=input.value;
+
+if(text=="") return;
+
+let messages=document.getElementById("messages");
+
+messages.innerHTML += `
+<div class="msg">
+<b>You:</b> ${text}
+</div>
+`;
+
+let answer=solveMath(text);
+
+messages.innerHTML += `
+<div class="msg">
+<b>AI:</b> ${answer}
+</div>
+`;
+
+input.value="";
+
+messages.scrollTop=messages.scrollHeight;
+
+}
+
+document.getElementById("userInput").addEventListener("keypress",function(e){
+
+if(e.key==="Enter"){
+sendMessage();
+}
+
+});
+
+</script>
+
+</body>
+</html>
